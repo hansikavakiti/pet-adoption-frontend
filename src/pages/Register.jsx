@@ -29,7 +29,7 @@ function Register() {
 
         try {
             const userResponse = await fetch(
-                "http://localhost:8080/users/register",
+                `${import.meta.env.VITE_API_BASE_URL}/users/register`,
                 {
                     method: "POST",
                     headers: {
@@ -52,7 +52,7 @@ function Register() {
 
             if (formData.role === "SHELTER") {
                 const shelterResponse = await fetch(
-                    "http://localhost:8080/shelters",
+                    `${import.meta.env.VITE_API_BASE_URL}/shelters`,
                     {
                         method: "POST",
                         headers: {

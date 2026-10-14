@@ -31,19 +31,19 @@ function AdminDashboard() {
             ] = await Promise.all([
 
                 fetch(
-                    "http://localhost:8080/admin/users"
+                    "${import.meta.env.VITE_API_BASE_URL}/admin/users"
                 ),
 
                 fetch(
-                    "http://localhost:8080/admin/shelters"
+                    "${import.meta.env.VITE_API_BASE_URL}/admin/shelters"
                 ),
 
                 fetch(
-                    "http://localhost:8080/admin/pets"
+                    "${import.meta.env.VITE_API_BASE_URL}/admin/pets"
                 ),
 
                 fetch(
-                    "http://localhost:8080/admin/adoption-requests"
+                    "${import.meta.env.VITE_API_BASE_URL}/admin/adoption-requests"
                 )
 
             ]);
@@ -93,7 +93,7 @@ function AdminDashboard() {
         try {
 
             const response = await fetch(
-                `http://localhost:8080/admin/users/${id}`,
+                `${import.meta.env.VITE_API_BASE_URL}/admin/users/${id}`,
                 {
                     method: "DELETE"
                 }
@@ -131,7 +131,7 @@ function AdminDashboard() {
         try {
 
             const response = await fetch(
-                `http://localhost:8080/admin/shelters/${id}`,
+                `${import.meta.env.VITE_API_BASE_URL}/admin/shelters/${id}`,
                 {
                     method: "DELETE"
                 }
@@ -173,7 +173,7 @@ function AdminDashboard() {
         try {
 
             const response = await fetch(
-                `http://localhost:8080/admin/pets/${id}`,
+                `${import.meta.env.VITE_API_BASE_URL}/admin/pets/${id}`,
                 {
                     method: "DELETE"
                 }
@@ -211,7 +211,7 @@ function AdminDashboard() {
         try {
 
             const response = await fetch(
-                `http://localhost:8080/admin/adoption-requests/${id}`,
+                `${import.meta.env.VITE_API_BASE_URL}/admin/adoption-requests/${id}`,
                 {
                     method: "DELETE"
                 }
@@ -248,7 +248,7 @@ function AdminDashboard() {
         try {
 
             const response = await fetch(
-                `http://localhost:8080/shelters/${id}/status?status=${status}`,
+                `${import.meta.env.VITE_API_BASE_URL}/shelters/${id}/status?status=${status}`,
                 {
                     method: "PUT"
                 }
@@ -285,7 +285,7 @@ function AdminDashboard() {
         try {
 
             const response = await fetch(
-                `http://localhost:8080/adoption-requests/${id}/status?status=${status}`,
+                `${import.meta.env.VITE_API_BASE_URL}/adoption-requests/${id}/status?status=${status}`,
                 {
                     method: "PUT"
                 }

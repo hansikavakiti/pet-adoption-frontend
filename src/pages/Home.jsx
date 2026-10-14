@@ -10,7 +10,7 @@ function Home() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch("http://localhost:8080/pets")
+        fetch(`${import.meta.env.VITE_API_BASE_URL}/pets`)
             .then((response) => {
                 if (!response.ok) {
                     throw new Error("Failed to load pets");

@@ -38,7 +38,7 @@ function ShelterDashboard() {
     const initializeShelter = async () => {
         try {
             const response = await fetch(
-                `http://localhost:8080/shelters/user/${user.id}`
+                `${import.meta.env.VITE_API_BASE_URL}/shelters/user/${user.id}`
             );
 
             if (!response.ok) {
@@ -69,7 +69,7 @@ function ShelterDashboard() {
     // Load only this shelter's pets.
     const fetchPets = async (shelterId) => {
         const response = await fetch(
-            "http://localhost:8080/pets"
+            `${import.meta.env.VITE_API_BASE_URL}/pets`
         );
 
         if (!response.ok) {
@@ -90,8 +90,8 @@ function ShelterDashboard() {
     const fetchApplications = async (shelterId) => {
         const [applicationsResponse, petsResponse] =
             await Promise.all([
-                fetch("http://localhost:8080/adoption-requests"),
-                fetch("http://localhost:8080/pets")
+                fetch(`${import.meta.env.VITE_API_BASE_URL}/adoption-requests`),
+                fetch(`${import.meta.env.VITE_API_BASE_URL}/pets`)
             ]);
 
         if (!applicationsResponse.ok || !petsResponse.ok) {
@@ -163,8 +163,8 @@ function ShelterDashboard() {
             };
 
             const url = editingPet
-                ? `http://localhost:8080/pets/${editingPet.id}`
-                : "http://localhost:8080/pets";
+                ? `${import.meta.env.VITE_API_BASE_URL}/pets/${editingPet.id}`
+                : `${import.meta.env.VITE_API_BASE_URL}/pets`;
 
             const response = await fetch(url, {
                 method: editingPet ? "PUT" : "POST",
@@ -222,7 +222,7 @@ function ShelterDashboard() {
 
         try {
             const response = await fetch(
-                `http://localhost:8080/pets/${id}`,
+                `${import.meta.env.VITE_API_BASE_URL}/pets/${id}`,
                 { method: "DELETE" }
             );
 
@@ -247,7 +247,7 @@ function ShelterDashboard() {
     const updateApplicationStatus = async (id, status) => {
         try {
             const response = await fetch(
-                `http://localhost:8080/adoption-requests/${id}/status?status=${status}`,
+                `${import.meta.env.VITE_API_BASE_URL}/adoption-requests/${id}/status?status=${status}`,
                 { method: "PUT" }
             );
 

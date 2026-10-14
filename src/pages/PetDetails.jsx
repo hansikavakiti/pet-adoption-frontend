@@ -19,7 +19,7 @@ function PetDetails() {
         try {
 
             const response = await fetch(
-                `http://localhost:8080/pets/${id}`
+                `${import.meta.env.VITE_API_BASE_URL}/pets/${id}`
             );
 
             if (!response.ok) {
@@ -79,7 +79,7 @@ function PetDetails() {
         try {
 
             const response = await fetch(
-                "http://localhost:8080/adoption-requests",
+                `${import.meta.env.VITE_API_BASE_URL}/adoption-requests`,
                 {
                     method: "POST",
 

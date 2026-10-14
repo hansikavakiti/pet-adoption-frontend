@@ -24,7 +24,7 @@ function AdopterDashboard() {
         try {
 
             const response = await fetch(
-                "http://localhost:8080/adoption-requests"
+                `${import.meta.env.VITE_API_BASE_URL}/adoption-requests`
             );
 
             if (!response.ok) {

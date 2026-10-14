@@ -23,7 +23,7 @@ function Pets() {
         try {
 
             const response = await fetch(
-                "http://localhost:8080/pets"
+                `${import.meta.env.VITE_API_BASE_URL}/pets`
             );
 
             if (!response.ok) {
