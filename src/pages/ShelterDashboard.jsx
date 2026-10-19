@@ -8,6 +8,9 @@ function ShelterDashboard() {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [editingPet, setEditingPet] = useState(null);
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [imagePreview, setImagePreview] = useState("");
+    const [uploadingImage, setUploadingImage] = useState(false);
 
     const user = JSON.parse(localStorage.getItem("user"));
 
@@ -138,10 +141,64 @@ function ShelterDashboard() {
             [e.target.name]: e.target.value
         });
     };
+    
+    const handleImageChange = (e) => {
+        const file = e.target.files?.[0];
+
+        if (!file) return;
+
+        if (!file.type.startsWith("image/")) {
+            alert("Please select an image file.");
+            e.target.value = "";
+            return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+            alert("Please select an image smaller than 5 MB.");
+            e.target.value = "";
+            return;
+        }
+
+        setSelectedImage(file);
+        setImagePreview(URL.createObjectURL(file));
+    };
+
+    const uploadImage = async () => {
+        if (!selectedImage) return formData.imageUrl;
+
+        setUploadingImage(true);
+
+        try {
+            const data = new FormData();
+            data.append("file", selectedImage);
+
+            const response = await fetch(
+                `${import.meta.env.VITE_API_BASE_URL}/api/images/upload`,
+                {
+                    method: "POST",
+                    body: data
+                }
+            );
+
+            const result = await response.json();
+
+            if (!response.ok || !result.imageUrl) {
+                throw new Error(result.error || "Image upload failed.");
+            }
+
+            return result.imageUrl;
+        } finally {
+            setUploadingImage(false);
+        }
+    
+    };
+
 
     const resetForm = () => {
         setEditingPet(null);
         setFormData({ ...emptyForm });
+        setSelectedImage(null);
+        setImagePreview("");
     };
 
     // Add a new pet or update an existing pet.
@@ -156,8 +213,11 @@ function ShelterDashboard() {
         setSaving(true);
 
         try {
+            const uploadedImageUrl = await uploadImage();
+
             const petData = {
                 ...formData,
+                imageUrl: uploadedImageUrl,
                 age: Number(formData.age),
                 shelterId: shelter.id
             };
@@ -436,16 +496,35 @@ function ShelterDashboard() {
                         />
                     </div>
 
+                    
                     <div className="form-group">
-                        <label>Image URL</label>
+                        <label>Upload Pet Image</label>
+
                         <input
-                            type="url"
-                            name="imageUrl"
-                            placeholder="https://example.com/pet.jpg"
-                            value={formData.imageUrl}
-                            onChange={handleChange}
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageChange}
                         />
+
+                        {(imagePreview || formData.imageUrl) && (
+                            <div style={{ marginTop: "12px" }}>
+                                <img
+                                    src={imagePreview || formData.imageUrl}
+                                    alt="Pet preview"
+                                    style={{
+                                        width: "200px",
+                                        height: "160px",
+                                        objectFit: "cover",
+                                        borderRadius: "12px",
+                                        display: "block"
+                                    }}
+                                />
+                            </div>
+                        )}
+
+                        {uploadingImage && <p>Uploading image...</p>}
                     </div>
+
 
                     <div className="form-group">
                         <label>Description</label>
@@ -469,12 +548,19 @@ function ShelterDashboard() {
                         </select>
                     </div>
 
-                    <button type="submit" disabled={saving}>
+                    <button type="submit" disabled={saving || uploadingImage}>
                         {saving
                             ? "Saving..."
                             : editingPet
                                 ? "Update Pet"
                                 : "Add Pet"}
+                        {uploadingImage
+                            ? "Uploading Image..."
+                            :  saving
+                                ? "Saving..."
+                                : editingPet
+                                    ? "Update Pet"
+                                    : "Add Pet"}
                     </button>
 
                     {editingPet && (
