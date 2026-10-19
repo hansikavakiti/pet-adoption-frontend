@@ -549,11 +549,6 @@ function ShelterDashboard() {
                     </div>
 
                     <button type="submit" disabled={saving || uploadingImage}>
-                        {saving
-                            ? "Saving..."
-                            : editingPet
-                                ? "Update Pet"
-                                : "Add Pet"}
                         {uploadingImage
                             ? "Uploading Image..."
                             :  saving
